@@ -242,6 +242,11 @@
 #include "../usermods/LD2410_v2/usermod_ld2410.h"
 #endif
 
+#ifdef USERMOD_ID_WORDCLOCK24
+#include "../usermods/usermod_v2_word_clock24/usermod_v2_word_clock24.h"
+#endif
+
+
 void registerUsermods()
 {
 /*
@@ -470,4 +475,9 @@ void registerUsermods()
   #ifdef USERMOD_POV_DISPLAY
   UsermodManager::add(new PovDisplayUsermod());
   #endif
+
+  #ifdef USERMOD_ID_WORDCLOCK24
+  UsermodManager::add(new WordClock24Usermod());
+  #endif
+
 }
