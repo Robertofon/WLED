@@ -27,6 +27,7 @@ class WordClock24Usermod: public Usermod
     VOGTLAND,
     SWISS,
     FRANKEN,
+    FRENCH,
     LAST
   };
 
@@ -131,6 +132,31 @@ class WordClock24Usermod: public Usermod
       {  F_ETZAD_ISSES, F_DREIFERDL, OFF, OFF , OFF, OFF, OFF, OFF, OFF, OFF}, // :45 dreiviertel / etzad isses dreiferdl
       {  F_ETZAD_ISSES, F_KURZ_NACH, F_DREIFERDL }, // :50 10 vor / etzad isses kurz nach dreiferdl
       {  F_GLEI_HAMMAS, F_UM, OFF, OFF, OFF, OFF, OFF, OFF, OFF, OFF, OFF, OFF, OFF, OFF, OFF, OFF, OFF}, // :55 fünf vor / glei hammas um
+    };
+
+    // Wiring for french
+    #define F_A 40, 39, 38, 37, 36 //5
+    #define F_B 21, 20, 18, 17, 16, 15 //6 
+    #define F_C 66, 67, 68, 69 //4
+    #define F_D 92, 93, 94, 95, 96, 97, 98 //7
+    #define F_E 109, 108, 107, 106 //5
+    #define F_G 114, 115 //2
+    #define F_H 110, 111, 112, 113, 116, 117,  118,  119, 120 //10
+    #define F_I 101, 102, 103, 104, 88, 89, 90, 91 //8
+
+    const uint8_t maskMinutesfrench[12][maskSizeMinutesDia] =
+    { {  F_A, F_B, OFF, OFF, OFF, OFF, OFF, OFF, OFF, OFF, OFF, OFF, OFF, OFF, OFF, OFF, OFF }, // 00
+      {  F_B, F_C, F_D, 28, 29, 30, 31}, // :05
+      {  F_A , 52, 53, 54}, // :10
+      {  F_B, 43, 42, 40, 39, 38, 37, 36, OFF, OFF, OFF, OFF, OFF, OFF}, // :15 
+      {  F_D, 22, 23, 24, 25, 26}, // :20
+      {  F_E, 22, 23, 24, 25, 26, 7, 8, 9, 10, OFF, OFF, OFF}, // :25
+      {  F_G, F_E, 21, 20, 18, 17, 16, 15, 14, OFF , OFF, OFF, OFF, OFF, OFF, OFF}, // :30
+      {  F_H, 44, 45, 46, 47, 48, 22, 23, 24, 25, 26, 7, 8, 9, 10}, // :35 
+      {  F_H, 44, 45, 46, 47, 48, 22, 23, 24, 25, 26}, // :40 
+      {  F_D, 44, 45, 46, 47, 48, 50, 51, 40, 39, 38, 37, 36}, // :45 
+      {  F_D, F_G, F_C 44, 45, 46, 47, 48, 52, 53, 54}, // :50
+      {  F_I, 44, 45, 46, 47, 48, 28, 29, 30, 31}, // :55
     };
 
     // hour masks
@@ -250,7 +276,23 @@ class WordClock24Usermod: public Usermod
       {  16, 17, 18, 19, 20, 21, OFF, OFF, OFF, OFF, OFF, OFF, OFF, OFF, OFF }, // 12: zwölfe
     };
  
-    public: uint8_t maskItIs[maskSizeItIs]      = { 110, 111, 113, 114, 115,   OFF,  OFF,  OFF,  OFF}; // ES IST UHR
+    // Wiring for french
+    const uint8_t maskHoursfrench[12][maskSizeHours] = 
+    { {  92,  93,  94,  OFF,   OFF,   OFF,   OFF,   OFF,  OFF,  OFF,   OFF,   OFF,   OFF,   OFF }, // 01: 
+      {  117,  118,  119,  120,   OFF,   OFF,   OFF,   OFF,  OFF,  OFF,   OFF,   OFF,   OFF,   OFF }, // 02: 
+      {  103,  102,  101,  99,   OFF,   OFF,   OFF,   OFF,  OFF,  OFF,   OFF,   OFF,   OFF,   OFF }, // 03: 
+      {  109,  108,  107,  106,  105,   104,   OFF,   OFF,  OFF,  OFF,   OFF,   OFF,   OFF,   OFF }, // 04: 
+      {  7,  8,  9,  10,   OFF,   OFF,   OFF,   OFF,  OFF,  OFF,   OFF,   OFF,   OFF,   OFF }, // 05: 
+      {  4,  5,  6,  OFF,  OFF,   OFF,   OFF,   OFF,  OFF,  OFF,   OFF,   OFF,   OFF,   OFF }, // 06: 
+      {  95,  96,  97,  98,  OFF,  OFF,   OFF,   OFF,  OFF,  OFF,   OFF,   OFF,   OFF,   OFF }, // 07: 
+      {  0,  1,  2,  3,   OFF,   OFF,   OFF,   OFF,  OFF,  OFF,   OFF,   OFF,   OFF,   OFF }, // 08: 
+      {  88,  89,  90,  91,   OFF,   OFF,   OFF,   OFF,  OFF,  OFF,   OFF,   OFF,   OFF,   OFF }, // 09: 
+      {  68,  69,  70,  OFF,   OFF,   OFF,   OFF,   OFF,  OFF,  OFF,   OFF,   OFF,   OFF,   OFF }, // 10: 
+      {  65,  64,  63,   62,   OFF,   OFF,   OFF,   OFF,  OFF,  OFF,   OFF,   OFF,   OFF,   OFF }, // 11: 
+      {  66,   67,   68,   69,   OFF,   OFF,   OFF,   OFF,  OFF,  OFF,   OFF,   OFF,   OFF,   OFF }, // 12:  
+    };
+
+    public: uint8_t maskItIs[maskSizeItIs]      = { 110, 111, 113, 114, 115,   OFF,  OFF,  OFF,  OFF}; // ES IST UHR ore IL EST
     public: uint8_t maskItIsSwiss[maskSizeItIs] = { 110, 111, 113, 114, 115, 116,  OFF,  OFF, OFF};  // ES ISCH
 
     // UHR ein- / ausblenden
@@ -358,6 +400,10 @@ class WordClock24Usermod: public Usermod
         case eDIALECT::FRANKEN:
           updateLedMask(maskHoursFranken[index], maskSizeHoursDia);
           break;
+
+        case eDIALECT::FRENCH:
+          updateLedMask(maskHoursFranken[index], maskSizeHoursDia);
+          break;
         
         default:
           updateLedMask(maskHours[index], maskSizeHours);
@@ -380,6 +426,10 @@ class WordClock24Usermod: public Usermod
           break;
         
         case eDIALECT::FRANKEN:
+          updateLedMask(maskMinutesFranken[index], maskSizeMinutesDia);
+          break;
+        
+        case eDIALECT::FRENCH:
           updateLedMask(maskMinutesFranken[index], maskSizeMinutesDia);
           break;
         
@@ -440,8 +490,13 @@ class WordClock24Usermod: public Usermod
             break;
 
           case eDIALECT::FRANKEN:
-            // zefix, naa
+            // tbd
             break;
+
+          case eDIALECT::FRENCH:
+            // tbd
+            break;
+
 
           default:
             updateLedMask(maskItIs, maskSizeItIs);
@@ -478,6 +533,10 @@ class WordClock24Usermod: public Usermod
               case eDIALECT::FRANKEN: 
                 setHours(hours+1, false,minutes);
                 break;
+              
+              case eDIALECT::FRENCH:
+                setHours(hours+1, false,minutes);
+                break;
 
               default:
                 setHours(hours, false,minutes);
@@ -493,6 +552,10 @@ class WordClock24Usermod: public Usermod
                 break;
 
               case eDIALECT::FRANKEN: 
+                setHours(hours+1, false,minutes);
+                break;
+              
+              case eDIALECT::FRENCH:
                 setHours(hours+1, false,minutes);
                 break;
 
@@ -512,6 +575,10 @@ class WordClock24Usermod: public Usermod
                 break;
 
               case eDIALECT::FRANKEN: 
+                setHours(hours+1, false,minutes);
+                break;
+              
+              case eDIALECT::FRENCH: 
                 setHours(hours+1, false,minutes);
                 break;
 
@@ -722,7 +789,7 @@ class WordClock24Usermod: public Usermod
 
     virtual void appendConfigData() override
     {
-      oappend(SET_F("addInfo('WordClock24Usermod:Dialect',1,'0=None,1=Vogtland,2=Swiss,3=Franken');"));
+      oappend(SET_F("addInfo('WordClock24Usermod:Dialect',1,'0=None,1=Vogtland,2=Swiss,3=Franken,4=French');"));
     }
 
     /*
