@@ -323,7 +323,6 @@ WLED_GLOBAL bool rlyOpenDrain _INIT(RLYODRAIN);
 #endif
 
 WLED_GLOBAL char ntpServerName[33] _INIT("0.wled.pool.ntp.org");   // NTP server to use
-WLED_GLOBAL byte apBehavior _INIT(AP_BEHAVIOR_ALWAYS);       // access point opens when no connection after boot by default
 
 // WiFi CONFIG (all these can be changed via web UI, no need to set them here)
 WLED_GLOBAL std::vector<WiFiConfig> multiWiFi;

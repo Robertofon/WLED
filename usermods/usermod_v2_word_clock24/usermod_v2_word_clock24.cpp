@@ -760,3 +760,6 @@ class WordClock24Usermod: public Usermod
    //More methods can be added in the future, this example will then be extended.
    //Your usermod will remain compatible as it does not need to implement all methods from the Usermod base class!
 };
+
+static WordClock24Usermod usermod_v2_word_clock24;
+REGISTER_USERMOD(usermod_v2_word_clock24);
